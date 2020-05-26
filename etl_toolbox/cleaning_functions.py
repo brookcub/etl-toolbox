@@ -24,4 +24,4 @@ def clean_whitespace(x):
      - \u180E \u200B \u200C \u200D \u2060 \uFEFF
     """
 
-    pass
+    return " ".join(x.split())

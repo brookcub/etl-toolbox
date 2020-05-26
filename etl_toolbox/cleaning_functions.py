@@ -1,9 +1,22 @@
 import re
 
 
-def fingerprint(x):
-    """Returns a lowercase, alphanumeric representation of x"""
-    return re.sub(r'[^0-9a-z]', '', str(x).lower())
+def fingerprint(x, special_characters=''):
+    """
+    Returns a lowercase, alphanumeric representation of x
+
+    Example input: '(Aa_Bb_Cc)'
+    Example output: 'aabbcc'
+
+    Expects: anything that can be meaningfully cast to a str
+    Returns: str
+
+    Optional parameters:
+        special_characters (str): special characters to allow in the fingerprint
+    """
+    remove_regex = r'[^0-9a-z{}]'.format(re.escape(special_characters))
+
+    return re.sub(remove_regex, '', str(x).lower())
 
 
 def clean_whitespace(x):

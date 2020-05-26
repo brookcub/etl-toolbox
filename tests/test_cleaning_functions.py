@@ -3,7 +3,7 @@ from etl_toolbox.cleaning_functions import fingerprint, clean_whitespace
 
 
 @pytest.mark.parametrize("input, expected", [
-    ('AaBbCc',                  'aabbcc'),
+    ('(Aa_Bb_Cc)',              'aabbcc'),
     (' sdfD 432   ^%',          'sdfd432'),
     ('###$@!%^&*()-=',          ''),
     ('F\nP\n\t\tZ    ',         'fpz'),
@@ -11,6 +11,16 @@ from etl_toolbox.cleaning_functions import fingerprint, clean_whitespace
 ])
 def test_fingerprint(input, expected):
     assert fingerprint(input) == expected
+
+
+@pytest.mark.parametrize("input, special_characters, expected", [
+    ('Phone#', '#',             'phone#'),
+    ('$AMOUNT  ', '$',          '$amount'),
+    ('\\backslashes\\', '\\',   '\\backslashes\\'),
+    ('%(MULTIPLE$@()_', '%_@(', '%(multiple@(_')
+])
+def test_fingerprint_special_characters(input, special_characters, expected):
+    assert fingerprint(input, special_characters) == expected
 
 
 @pytest.mark.parametrize("input, expected", [

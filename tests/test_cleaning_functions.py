@@ -6,7 +6,8 @@ from etl_toolbox.cleaning_functions import fingerprint, clean_whitespace
     ('AaBbCc',                  'aabbcc'),
     (' sdfD 432   ^%',          'sdfd432'),
     ('###$@!%^&*()-=',          ''),
-    ('F\nP\n\t\tZ    ',         'fpz')
+    ('F\nP\n\t\tZ    ',         'fpz'),
+    (u'a\u00E3aa\u00E5a\ufffd', 'aaaa')
 ])
 def test_fingerprint(input, expected):
     assert fingerprint(input) == expected

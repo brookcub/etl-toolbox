@@ -15,7 +15,7 @@ Pending
 
 * etl_toolbox.cleaning_functions
   * Basic transformations for single units of data
-  * `fingerprint()`, `clean_whitespace()`
+  * `fingerprint()`, `clean_null()`, `clean_whitespace()`
 
 Additional modules and functions pending
 

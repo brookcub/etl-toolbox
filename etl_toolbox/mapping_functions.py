@@ -14,11 +14,11 @@ def map_labels(labels, fingerprint_map, special_characters='', return_unmapped=F
     returned list.
 
     Example:
-        >>> from etl_toolbox.mapping_functions import map_labels
-        >>> labels = [1, '2_A', '2b']
-        >>> fingerprint_map = {'1': 'one', '2a': 'two_a', 'extrakey': 'extravalue'}
-        >>> map_labels(labels, fingerprint_map)
-        ['one', 'two_a', None]
+      >>> from etl_toolbox.mapping_functions import map_labels
+      >>> labels = [1, '2_A', '2b']
+      >>> fingerprint_map = {'1': 'one', '2a': 'two_a', 'extrakey': 'extravalue'}
+      >>> map_labels(labels, fingerprint_map)
+      ['one', 'two_a', None]
 
     :param labels:
         The list of labels to map. These will be fingerprinted for their
@@ -65,7 +65,7 @@ def map_labels(labels, fingerprint_map, special_characters='', return_unmapped=F
 
 def append_count(x):
     '''
-    A generator function that yields x with a numbered suffix
+    A generator function that yields x with a numbered suffix.
     '''
     i = 0
     while True:
@@ -84,10 +84,10 @@ def rename_duplicate_labels(labels, rename_generator=append_count):
     standardized.
 
     Example:
-        >>> from etl_toolbox.mapping_functions import rename_duplicate_labels
-        >>> labels = ['email', 'email', 'email', 'phone', 'name', 'email', 'phone'],
-        >>> rename_duplicate_labels(labels)
-        ['email_1', 'email_2', 'email_3', 'phone_1', 'name', 'email_4', 'phone_2']
+      >>> from etl_toolbox.mapping_functions import rename_duplicate_labels
+      >>> labels = ['email', 'email', 'email', 'phone', 'name', 'email', 'phone'],
+      >>> rename_duplicate_labels(labels)
+      ['email_1', 'email_2', 'email_3', 'phone_1', 'name', 'email_4', 'phone_2']
 
     :param labels:
         The list of labels to map.
@@ -99,14 +99,14 @@ def rename_duplicate_labels(labels, rename_generator=append_count):
         separated by underscore.
 
         Example:
-        >>> r = rename_generator('label')
-        >>> next(r)
-        'label_1'
-        >>> next(r)
-        'label_2'
+          >>> r = rename_generator('label')
+          >>> next(r)
+          'label_1'
+          >>> next(r)
+          'label_2'
 
     :return:
-        Returns a list
+        Returns a list.
     '''
 
     # Create dictionary of duplicate labels with initialized rename_generators

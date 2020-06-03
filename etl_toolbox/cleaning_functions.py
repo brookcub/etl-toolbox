@@ -7,14 +7,21 @@ def fingerprint(x, special_characters=''):
     """
     Returns a lowercase, alphanumeric representation of x
 
-    Example input: '(Aa_Bb_Cc)'
-    Example output: 'aabbcc'
+    Example:
+      >>> from etl_toolbox.cleaning_functions import fingerprint
+      >>> fingerprint('(Aa_Bb_Cc)')
+      'aabbcc'
 
-    Expects: anything that can be meaningfully cast to a str
-    Returns: str
+    :param x:
+        The object to be fingerprinted. Will be cast to a string using
+        ``str(x)``.
 
-    Optional parameters:
-        special_characters (str): special characters to allow in the fingerprint
+    :param special_characters:
+        (optional) A string of special characters to preserve while creating
+        the fingerprint.
+
+    :return:
+        Returns a string.
     """
     remove_regex = r'[^0-9a-z{}]'.format(re.escape(special_characters))
 
@@ -48,31 +55,46 @@ FALSEY_INDICATORS = [
 
 def clean_null(x, falsey_is_null=False, special_characters=''):
     """
-    Returns None if x is null-indicating, else returns x
+    Returns ``None`` if x is null-indicating, else returns x
 
     x is considered null-indicating if any of the following are true:
-     - x is None
-     - len(x) == 0
-     - fingerprint(x) in NULL_INDICATORS
-     - falsey_is_null == True and !x
-     - falsey_is_null == True and fingerprint(x) in FALSEY_INDICATORS
+     - x is ``None``
+     - ``len(x) == 0``
+     - ``fingerprint(x) in NULL_INDICATORS``
+     - ``falsey_is_null and !x``
+     - ``falsey_is_null and fingerprint(x) in FALSEY_INDICATORS``
      - x is an iterable consisting of all null-indicating values
      - x evaluates as a Python literal that is null-indicating
 
-    Example input: 'Unknown'
-    Example output: None
+    Example:
+      >>> from etl_toolbox.cleaning_functions import clean_null
+      >>> clean_null('Unknown')
+      None
 
-    Expects: any
-    Returns: None or x
+    :param x:
+        The object to be evaluated. x can be any type, though this function
+        is intended for use with strings, lists, and sets.
 
-    Optional parameters:
-        falsey_is_null (bool):
-            True = all falsey values will be considered null-indicating
-            False = not all falsey values will be considered null-indicating
-            default is False
+        The behavior may not be intuitive for some other types.
+        Ex) A dictionary will be considered null-indicating if it is either
+            empty, or all of its keys are null-indicating. This function does
+            not take dictionary values into account.
 
-        special_characters (str):
-            special characters to allow in the fingerprint
+    :param falsey_is_null:
+        (optional) A boolean which controls the behavior of falsey objects.
+        True = all falsey values will be considered null-indicating
+        False = not all falsey values will be considered null-indicating
+        The default is False.
+
+        A common use case for setting this to True would be when evaluating
+        numeric data in which '0' is a meaningful value.
+
+    :param special_characters:
+        (optional) A string of special characters to preserve while creating
+        the fingerprint of x.
+
+    :return:
+        Returns ``None`` or x.
     """
 
     if x is None:
@@ -126,19 +148,27 @@ def clean_null(x, falsey_is_null=False, special_characters=''):
 
 def clean_whitespace(x):
     """
-    Returns x with:
+    Returns x with whitespace characters cleaned.
+
+    Cleaning rules:
      - all whitespace characters replaced with standard ASCII space (32)
      - consecutive whitespace condensed
      - leading/trailing whitespace removed
 
-    Example input: ''' 123   abc 456
-                                def\t\t 789\t'''
-    Example output: '123 abc 456 def 789'
+    Example:
+      >>> from etl_toolbox.cleaning_functions import clean_whitespace
+      >>> clean_whitespace(''' 123   abc 456
+      ...                               def\t\t 789\t''')
+      '123 abc 456 def 789'
 
-    Expects: str
-    Returns: str
+    :param x:
+        The string to be cleaned.
 
-    Note: Does not remove unicode formatting characters without White_Space property:
+    :return:
+        Returns a string.
+
+    Note: Does not remove unicode formatting characters without White_Space
+    property:
      - \u180E \u200B \u200C \u200D \u2060 \uFEFF
     """
 

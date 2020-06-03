@@ -1,6 +1,10 @@
 import pytest
-from etl_toolbox.mapping_functions import map_labels
+import itertools
+from etl_toolbox.mapping_functions import map_labels, rename_duplicate_labels
 
+##
+## map_labels() tests
+##
 
 @pytest.mark.parametrize("labels, fingerprint_map, expected", [
     (
@@ -41,3 +45,38 @@ def test_map_labels_w_special_characters(labels, fingerprint_map,
 ])
 def test_map_labels_w_return_unmapped(labels, fingerprint_map, expected):
     assert map_labels(labels, fingerprint_map, return_unmapped=True) == expected
+
+
+##
+## rename_duplicate_labels() tests
+##
+
+@pytest.mark.parametrize("labels, expected", [
+    (
+        ['email', 'email', 'email', 'phone', 'name', 'email', 'phone'],
+        ['email_1', 'email_2', 'email_3', 'phone_1', 'name', 'email_4', 'phone_2']
+        ),
+    (
+        ['name', 'date', 'time', 'phone', 'email'],
+        ['name', 'date', 'time', 'phone', 'email']
+        )
+])
+def test_rename_duplicate_labels(labels, expected):
+    assert rename_duplicate_labels(labels) == expected
+
+
+@pytest.mark.parametrize("labels, rename_generator, expected", [
+    (
+        ['email', 'email', 'email', 'phone', 'name', 'email', 'phone'],
+        # Hip lambda generator comprehension:
+        lambda x: (str(i) + x for i in itertools.count()),
+        ['0email', '1email', '2email', '0phone', 'name', '3email', '1phone']
+        ),
+    (
+        ['name', 'date', 'time', 'phone', 'email'],
+        lambda x: (str(i) + x for i in itertools.count()),
+        ['name', 'date', 'time', 'phone', 'email']
+        )
+])
+def test_rename_duplicate_labels_w_rename_generator(labels, rename_generator, expected):
+    assert rename_duplicate_labels(labels, rename_generator=rename_generator) == expected

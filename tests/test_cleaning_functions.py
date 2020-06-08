@@ -35,7 +35,11 @@ def test_fingerprint_special_characters(input, special_characters, expected):
     ([None],                    None),
     ('[None,None]',             None),
     ({'empty'},                 None),
-    ((None, 'value'),           (None, 'value'))
+    ((None, 'value'),           (None, 'value')),
+    ('{"real_python_literal"}', '{"real_python_literal"}'),
+    ('{"fake_python_literal"',  '{"fake_python_literal"'),
+    ('[None,{"5"}]',            '[None,{"5"}]'),
+    ('[None,{"Null",("","")}]', None)
 ])
 def test_clean_null(input, expected):
     assert clean_null(input) == expected
@@ -50,7 +54,8 @@ def test_clean_null(input, expected):
     ('False',                   None),
     ([False],                   None),
     ('[None,0]',                None),
-    ((None, 'value'),           (None, 'value'))
+    ((None, 'value'),           (None, 'value')),
+    ('{0.0}',                   None)
 ])
 def test_clean_null_w_falsey_is_null(input, expected):
     assert clean_null(input, falsey_is_null=True) == expected
@@ -63,7 +68,7 @@ def test_clean_null_w_falsey_is_null(input, expected):
     ('\t\n\r\f\v',              ''),
     (u'\u2008 and \u3000',      'and'),
     (u'''\u0009 \u000A \u000B
-        \u000C \u000D a \u0020 
+        \u000C \u000D a \u0020
         \u0085 \u00A0 \u1680
         \u2000 \u2001 \u2002 b
         \u2003 \u2004 \u2005

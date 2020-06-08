@@ -139,7 +139,7 @@ def clean_null(x, falsey_is_null=False, special_characters=''):
             x_eval = ast.literal_eval(x)
             if clean_null(x_eval, falsey_is_null) is None:
                 return None
-        except ValueError:
+        except Exception:
             pass
 
     # Return x if is has not been found null-indicating in the above checks

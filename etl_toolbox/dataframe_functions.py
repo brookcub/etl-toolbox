@@ -90,6 +90,18 @@ def find_column_labels(df, label_fingerprints, label_match_thresh=3, special_cha
         Returns ``None``. The ``df`` argument is mutated.
     """
 
+    # Check whether the index is something other than the default RangeIndex,
+    # and temporarily change it to a RangeIndex if it is.
+    #
+    # This is necessary because pandas doesn't provide a way to drop rows in
+    # place using integer locations, however using the named index will produce
+    # unexpected results if the DataFrame has duplicate index values.
+    initial_index = df.index
+    initial_index_is_default = df.index.equals(df.reset_index().index)
+
+    if not initial_index_is_default:
+        df.reset_index(drop=True, inplace=True)
+
     # Iterate over rows to find the label index
     label_index = None
 
@@ -114,11 +126,19 @@ def find_column_labels(df, label_fingerprints, label_match_thresh=3, special_cha
                          'label_fingerprints contains the expected label names.')
 
     # Set DataFrame column labels
-    df.rename(columns=df.iloc[label_index], inplace=True)
+    df.rename(columns=df.loc[label_index], inplace=True)
 
     # Remove rows up to and including the label index
     df.drop(df.loc[:label_index].index, inplace=True)
-    df.reset_index(drop=True, inplace=True)
+
+    # If the initial index was a default RangeIndex, reset it so it is
+    # numbered from 0.
+    # Otherwise, restore the intial index, sliced to line up with the
+    # modified DataFrame.
+    if initial_index_is_default:
+        df.reset_index(drop=True, inplace=True)
+    else:
+        df.index = initial_index[label_index+1:]
 
 
 def merge_columns_by_label(df, deduplicate_values=False):

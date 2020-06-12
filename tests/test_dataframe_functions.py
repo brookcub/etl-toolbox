@@ -35,12 +35,41 @@ from etl_toolbox.dataframe_functions import merge_columns_by_label
             ],
             columns=['EML-addr', 'Dte', 'col3', 'phn-nmbr', 'NOM']
             )
+        ),
+    ### Test 2, named index containing duplicates
+    (
+        # df
+        pd.DataFrame([
+            ['misc.', 'numbers', '', ''],
+            ['', '', '', ''],
+            ['', '', '', 'counts'],
+            ['c', 'S', 'something-else', ''],
+            [1, 1, 1, 0],
+            [2, 3, 6, 0],
+            [3, 6, 18, 0]
+            ],
+            index=['aaa', 'bbb', 'ccc', 'ccc', 'ddd', 'ddd', 'ccc']
+            ),
+        # label_fingerprints
+        ['c', 's', 'somethingelse'],
+        # expected
+        pd.DataFrame([
+            [1, 1, 1, 0],
+            [2, 3, 6, 0],
+            [3, 6, 18, 0]
+            ],
+            index=['ddd', 'ddd', 'ccc'],
+            columns=['c', 'S', 'something-else', ''],
+            dtype='object'
+            )
         )
 ])
 def test_find_column_labels(df, label_fingerprints, expected):
     find_column_labels(df, label_fingerprints)
+
     assert df.equals(expected)
     assert df.columns.equals(expected.columns)
+    assert df.index.equals(expected.index)
 
 
 @pytest.mark.parametrize('df, label_fingerprints', [

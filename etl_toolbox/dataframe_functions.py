@@ -119,3 +119,72 @@ def find_column_labels(df, label_fingerprints, label_match_thresh=3, special_cha
     # Remove rows up to and including the label index
     df.drop(df.loc[:label_index].index, inplace=True)
     df.reset_index(drop=True, inplace=True)
+
+
+def merge_columns_by_label(df, deduplicate_values=False):
+    '''
+    Merges columns of a pandas `DataFrame` that have identical labels
+
+    For duplicate column labels in ``df``, the first instance of each label
+    will be turned into a column of `list`s containing the values from all of
+    the instances. The other instances will then be dropped.
+
+    Note that this does not fingerprint the labels for comparison. Column
+    labels should be cleaned and mapped before using this tool.
+
+    Example:
+      ...
+      >>> print(df)
+          id        email         phone        email
+      0  AAA  aaa@aaa.com  111-111-1111  111@aaa.com
+      1  BAA  baa@baa.com  222-222-2222  222@baa.com
+      2  CAA  caa@caa.com  333-333-3333  333@caa.com
+      3  DAA  daa@daa.com  444-444-4444  444@daa.com
+      >>> merge_columns_by_label(df)
+      >>> print(df)
+          id                       email         phone
+      0  AAA  [aaa@aaa.com, 111@aaa.com]  111-111-1111
+      1  BAA  [baa@baa.com, 222@baa.com]  222-222-2222
+      2  CAA  [caa@caa.com, 333@caa.com]  333-333-3333
+      3  DAA  [daa@daa.com, 444@daa.com]  444-444-4444
+
+    :param df:
+        A pandas `DataFrame`.
+
+    :param deduplicate_values:
+        (optional) If set to ``True``, the values of the combined columns will
+        be deduplicated and stored in the modified `DataFrame` as a `set`
+        instead of a `list`.
+
+    :return:
+        Returns ``None``. The ``df`` argument is mutated.
+    '''
+
+    # Get the set of duplicate column labels
+    duplicate_labels = set(df.columns[df.columns.duplicated()])
+
+    for label in duplicate_labels:
+        # Get integer location of first instance of label
+        position_array = df.columns.get_loc(label)
+        first_iloc = next(i for i, x in enumerate(position_array) if x)
+
+        # Set the values of that column to a list (or set) combining all of the
+        # instances of label
+        if deduplicate_values:
+            deduped_column = []
+            for cell in df[label].values:
+                deduped_column.append(set(cell))
+            df.iloc[:, first_iloc] = deduped_column
+        else:
+            df.iloc[:, first_iloc] = df[label].values.tolist()
+
+        # Temporarily rename first instance while others are dropped
+        temp_labels = df.columns.tolist()
+        temp_labels[first_iloc] = 'temp'
+        df.columns = temp_labels
+        df.drop(columns=label, inplace=True)
+
+        # Rename back to the original label
+        temp_labels = df.columns.tolist()
+        temp_labels[first_iloc] = label
+        df.columns = temp_labels

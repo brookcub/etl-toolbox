@@ -99,7 +99,7 @@ def find_column_labels(df, label_fingerprints, label_match_thresh=3, special_cha
     # place using integer locations, however using the named index will produce
     # unexpected results if the DataFrame has duplicate index values.
     initial_index = df.index
-    initial_index_is_default = df.index.equals(df.reset_index().index)
+    initial_index_is_default = index_is_default(df)
 
     if not initial_index_is_default:
         df.reset_index(drop=True, inplace=True)
@@ -212,12 +212,22 @@ def merge_columns_by_label(df, deduplicate_values=False):
         df.columns = temp_labels
 
 
+def index_is_default(df):
+    '''
+    Returns ``True`` if the provided `DataFrame` has the default ``RangeIndex``.
+
+    Else returns ``False``.
+    '''
+
+    return df.index.equals(pd.RangeIndex(df.shape[0])) and df.index.name is None
+
+
 def dataframe_clean_null(df, empty_row_thresh=1, empty_column_thresh=1, falsey_is_null=False, special_characters=''):
     '''
     Cleans null values of a pandas `DataFrame` and removes empty rows/columns
 
     Note that this function is computationally intensive and might be slow on
-    large 'DataFrame's.
+    large `DataFrame`s.
 
     Example:
       ...
@@ -267,7 +277,7 @@ def dataframe_clean_null(df, empty_row_thresh=1, empty_column_thresh=1, falsey_i
         Returns ``None``. The ``df`` argument is mutated.
     '''
 
-    index_is_default = df.index.equals(pd.RangeIndex(df.shape[0])) and df.index.name is None
+    initial_index_is_default = index_is_default(df)
 
     # Apply clean_null() to every cell in df
     for i in range(df.shape[0]):
@@ -289,5 +299,5 @@ def dataframe_clean_null(df, empty_row_thresh=1, empty_column_thresh=1, falsey_i
         df.dropna(axis=0, how='all', inplace=True)
 
     # Reset the index if it was initially a default index
-    if index_is_default:
+    if initial_index_is_default:
         df.reset_index(drop=True, inplace=True)

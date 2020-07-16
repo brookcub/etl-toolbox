@@ -4,6 +4,7 @@ import numpy as np
 from etl_toolbox.dataframe_functions import find_column_labels
 from etl_toolbox.dataframe_functions import merge_columns_by_label
 from etl_toolbox.dataframe_functions import dataframe_clean_null
+from etl_toolbox.dataframe_functions import index_is_default
 
 
 @pytest.mark.parametrize('df, label_fingerprints, expected', [
@@ -158,6 +159,54 @@ def test_merge_columns_by_label_dedup(df, expected):
     merge_columns_by_label(df, deduplicate_values=True)
     assert df.equals(expected)
     assert df.columns.equals(expected.columns)
+
+
+@pytest.mark.parametrize('df, expected', [
+    ### Test 1
+    (
+        # df
+        pd.DataFrame(
+            np.random.randint(0,100,size=(15, 4)),
+            columns=list('ABCD')),
+        # expected
+        True
+        ),
+    ### Test 2
+    (
+        # df
+        pd.DataFrame([
+            [1, 1, 1, 0],
+            [2, 3, 6, 0],
+            [3, 6, 18, 0]
+            ],
+            index=['aaa', 'bbb', 'ccc']
+            ),
+        # expected
+        False
+        ),
+    ### Test 3
+    (
+        # df
+        pd.DataFrame(
+            np.random.randint(0,10,size=(10, 2)),
+            index=pd.RangeIndex(start=0,stop=20,step=2)
+            ),
+        # expected
+        False
+        ),
+    ### Test 4
+    (
+        # df
+        pd.DataFrame(
+            np.random.randint(0,10,size=(10, 2)),
+            index=pd.RangeIndex(start=0,stop=10,name='test')
+            ),
+        # expected
+        False
+        ),
+])
+def test_index_is_default(df, expected):
+    assert index_is_default(df) == expected
 
 
 @pytest.mark.parametrize('df, expected', [

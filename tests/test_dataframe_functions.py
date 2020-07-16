@@ -1,7 +1,9 @@
 import pytest
 import pandas as pd
+import numpy as np
 from etl_toolbox.dataframe_functions import find_column_labels
 from etl_toolbox.dataframe_functions import merge_columns_by_label
+from etl_toolbox.dataframe_functions import dataframe_clean_null
 
 
 @pytest.mark.parametrize('df, label_fingerprints, expected', [
@@ -156,3 +158,112 @@ def test_merge_columns_by_label_dedup(df, expected):
     merge_columns_by_label(df, deduplicate_values=True)
     assert df.equals(expected)
     assert df.columns.equals(expected.columns)
+
+
+@pytest.mark.parametrize('df, expected', [
+    ### Test 1
+    (
+        # df
+        pd.DataFrame([
+            ['AAA', 'None', '111-111-1111', 'empty'],
+            ['BAA', 'baa@baa.com', '-', '-'],
+            ['CAA', 'caa@caa.com', 'notavailable', '...'],
+            ['DAA', 'blocked', '444-444-4444', 'null']
+            ],
+            columns=['id', 'email', 'phone', 'col4']
+            ),
+        # expected
+        pd.DataFrame([
+            ['AAA', np.nan, '111-111-1111'],
+            ['BAA', 'baa@baa.com', np.nan],
+            ['CAA', 'caa@caa.com', np.nan],
+            ['DAA', np.nan, '444-444-4444']
+            ],
+            columns=['id', 'email', 'phone']
+            )
+        )
+])
+def test_dataframe_clean_null(df, expected):
+    dataframe_clean_null(df)
+
+    assert df.equals(expected)
+    assert df.columns.equals(expected.columns)
+    assert df.index.equals(expected.index)
+
+
+@pytest.mark.parametrize('df, expected', [
+    ### Test 1
+    (
+        # df
+        pd.DataFrame([
+            ['Golden jackal', 'Canis aureus', 'unknown', 'L', [], ''],
+            ['Pie, rufous tree', 'Dendrocitta vagabunda', '65-1835935', 'M', {}, ''],
+            ['Eurasian badger', 'Meles meles', '48-7685429', 'S', 'none', ''],
+            ['', '', '', '', '', ''],
+            ['', '', '', '', 'actual value', ''],
+            ['', '', '', '', 'actual value', 'actual value2'],
+            ['Karjalankarhukoira', '', '', '', 'actual value', ''],
+            ['Arctic tern', 'Sterna paradisaea', '69-5988769', 'false', '', ''],
+            ['Grant\'s gazelle', 'Gazella granti', '-', '-', ['none'], ''],
+            ['Swallowtail butterfly', '-blank-', '-', '-', np.nan, '']
+            ],
+            columns=['common_name', 'scientific_name', 'EIN', 'shirt_size', 'col5', 'col6']
+            ),
+        # expected
+        pd.DataFrame([
+            ['Golden jackal', 'Canis aureus', np.nan, 'L'],
+            ['Pie, rufous tree', 'Dendrocitta vagabunda', '65-1835935', 'M'],
+            ['Eurasian badger', 'Meles meles', '48-7685429', 'S'],
+            ['Karjalankarhukoira', np.nan, np.nan, np.nan],
+            ['Arctic tern', 'Sterna paradisaea', '69-5988769', 'false'],
+            ['Grant\'s gazelle', 'Gazella granti', np.nan, np.nan]
+            ],
+            columns=['common_name', 'scientific_name', 'EIN', 'shirt_size']
+            )
+        )
+])
+def test_dataframe_clean_null_w_thresh(df, expected):
+    dataframe_clean_null(df, empty_row_thresh=2, empty_column_thresh=3)
+
+    assert df.equals(expected)
+    assert df.columns.equals(expected.columns)
+    assert df.index.equals(expected.index)
+
+
+@pytest.mark.parametrize('df, special_characters, falsey_is_null, expected', [
+    ### Test 1
+    (
+        # df
+        pd.DataFrame([
+            ['eleifend vitae', 0.2289343509, '+', 'false'],
+            ['non lorem vitae odio', 0.1746509874, '-', 'false'],
+            ['egestas', 0.248639792, '-', 'false'],
+            ['', '', '', 'false'],
+            ['Sed diam lorem, auctor quis, tristique', 0.1489477999, '+', 'false'],
+            ['false', 0, '-', False]
+            ],
+            columns=['words', 'number', 'polarity', 'false']
+            ),
+        # special_characters
+        '+-',
+        # falsey_is_null
+        True,
+        # expected
+        pd.DataFrame([
+            ['eleifend vitae', 0.2289343509, '+'],
+            ['non lorem vitae odio', 0.1746509874, '-'],
+            ['egestas', 0.248639792, '-'],
+            ['Sed diam lorem, auctor quis, tristique', 0.1489477999, '+'],
+            [np.nan, np.nan, '-']
+            ],
+            columns=['words', 'number', 'polarity'],
+            dtype='object'
+            ),
+        )
+])
+def test_dataframe_clean_null_w_cleaning_params(df, special_characters, falsey_is_null, expected):
+    dataframe_clean_null(df, special_characters=special_characters, falsey_is_null=falsey_is_null)
+
+    assert df.equals(expected)
+    assert df.columns.equals(expected.columns)
+    assert df.index.equals(expected.index)

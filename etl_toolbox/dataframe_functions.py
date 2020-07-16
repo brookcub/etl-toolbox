@@ -1,4 +1,6 @@
-from etl_toolbox.cleaning_functions import fingerprint
+import numpy as np
+import pandas as pd
+from etl_toolbox.cleaning_functions import fingerprint, clean_whitespace, clean_null
 
 
 def find_column_labels(df, label_fingerprints, label_match_thresh=3, special_characters=''):
@@ -208,3 +210,84 @@ def merge_columns_by_label(df, deduplicate_values=False):
         temp_labels = df.columns.tolist()
         temp_labels[first_iloc] = label
         df.columns = temp_labels
+
+
+def dataframe_clean_null(df, empty_row_thresh=1, empty_column_thresh=1, falsey_is_null=False, special_characters=''):
+    '''
+    Cleans null values of a pandas `DataFrame` and removes empty rows/columns
+
+    Note that this function is computationally intensive and might be slow on
+    large 'DataFrame's.
+
+    Example:
+      ...
+      >>> print(df)
+          id        email         phone   col4
+      0  AAA         None  111-111-1111  empty
+      1  BAA  baa@baa.com             -      -
+      2  CAA  caa@caa.com  notavailable    ...
+      3  DAA      blocked  444-444-4444   null
+      >>> dataframe_clean_null(df)
+      >>> print(df)
+          id        email         phone
+      0  AAA          NaN  111-111-1111
+      1  BAA  baa@baa.com           NaN
+      2  CAA  caa@caa.com           NaN
+      3  DAA          NaN  444-444-4444
+
+    :param df:
+        A pandas `DataFrame`.
+
+    :param empty_row_thresh:
+        (optional) The number of non-null values required for a row to be
+        considered populated/non-empty. Default is 1.
+
+    :param empty_column_thresh:
+        (optional) The number of non-null values required for a column to be
+        considered populated/non-empty. Default is 1.
+
+        Note that rows are dropped before columns, so this threshold will be
+        applied to the values that remain after rows are removed.
+
+        Also note that if this value is greater than 1, the resulting ``df``
+        may contain rows with fewer populated cells than ``empty_row_thresh``.
+        However, it will never contain completely empty rows.
+
+    :param falsey_is_null:
+        (optional) A boolean which controls whether all falsey objects are
+        considered null-indicating. See ``cleaning_functions.clean_null()``
+        documentation for details.
+
+    :param special_characters:
+        (optional) A string of special characters to preserve while creating
+        the fingerprints. Any special characters which are individually
+        meaningful in the data should be included here.
+
+    :return:
+        Returns ``None``. The ``df`` argument is mutated.
+    '''
+
+    index_is_default = df.index.equals(pd.RangeIndex(df.shape[0])) and df.index.name is None
+
+    # Apply clean_null() to every cell in df
+    for i in range(df.shape[0]):
+        for j in range(df.shape[1]):
+            val = clean_null(df.iloc[i, j],
+                             falsey_is_null=falsey_is_null,
+                             special_characters=special_characters)
+            if val is None:
+                df.iloc[i, j] = np.nan
+
+    # Drop rows with fewer populated cells than empty_row_thresh
+    df.dropna(axis=0, thresh=empty_row_thresh, inplace=True)
+
+    # Drop columns with fewer populated cells than empty_column_thresh
+    df.dropna(axis=1, thresh=empty_column_thresh, inplace=True)
+
+    # Make sure there are no empty rows in the final df
+    if empty_column_thresh > 1:
+        df.dropna(axis=0, how='all', inplace=True)
+
+    # Reset the index if it was initially a default index
+    if index_is_default:
+        df.reset_index(drop=True, inplace=True)

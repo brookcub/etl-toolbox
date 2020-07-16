@@ -30,6 +30,7 @@ def fingerprint(x, special_characters=''):
 
 NULL_INDICATORS = [
     '',
+    'blank',
     'blocked',
     'empty',
     'invalid',

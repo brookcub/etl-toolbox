@@ -1,3 +1,7 @@
+'''
+This module contains functions for working with files and directories.
+'''
+
 import os
 import re
 

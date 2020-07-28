@@ -1,3 +1,8 @@
+'''
+This module contains functions for mapping the values of iterable collections
+based on functions or keys.
+'''
+
 from .cleaning_functions import fingerprint
 
 

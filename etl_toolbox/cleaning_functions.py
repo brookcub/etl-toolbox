@@ -1,3 +1,7 @@
+'''
+This module contains functions for cleaning data.
+'''
+
 import ast
 import collections.abc
 import re

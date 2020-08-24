@@ -4,7 +4,7 @@ This module contains functions for working with pandas `DataFrame`s.
 
 import numpy as np
 import pandas as pd
-from etl_toolbox.cleaning_functions import fingerprint, clean_whitespace, clean_null
+from .cleaning_functions import fingerprint, clean_whitespace, clean_null
 
 
 def find_column_labels(df, label_fingerprints, label_match_thresh=3, special_characters=''):

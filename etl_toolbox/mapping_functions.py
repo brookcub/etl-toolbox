@@ -12,7 +12,7 @@ def map_labels(labels, fingerprint_map, special_characters='', return_unmapped=F
     and returns that mapped list.
 
     This is useful for mapping column labels from a dataframe/file to a
-    standard set of values, particularly when the labels are inconsistent.
+    standard schema, particularly when the labels are inconsistent.
 
     The order of ``labels`` will be preserved in the return, and if a label
     isn't found in ``fingerprint_map``, that label will be ``None`` in

@@ -7,7 +7,9 @@ import pandas as pd
 from .cleaning_functions import fingerprint, clean_whitespace, clean_null
 
 
-def find_column_labels(df, label_fingerprints, label_match_thresh=3, special_characters=''):
+def find_column_labels(
+    df, label_fingerprints, label_match_thresh=3, special_characters=''
+):
     """
     Finds a row of column labels within a pandas `DataFrame`
 
@@ -117,7 +119,9 @@ def find_column_labels(df, label_fingerprints, label_match_thresh=3, special_cha
         label_count = 0
 
         for cell in row.iteritems():
-            cell_fingerprint = fingerprint(cell[1], special_characters=special_characters)
+            cell_fingerprint = fingerprint(
+                cell[1], special_characters=special_characters
+            )
 
             if cell_fingerprint in label_fingerprints:
                 label_count += 1
@@ -128,8 +132,10 @@ def find_column_labels(df, label_fingerprints, label_match_thresh=3, special_cha
             break
 
     if label_index is None:
-        raise ValueError('Label row could not be identified. Make sure '
-                         'label_fingerprints contains the expected label names.')
+        raise ValueError(
+            'Label row could not be identified. Make sure '
+            'label_fingerprints contains the expected label names.'
+        )
 
     # Set DataFrame column labels
     df.rename(columns=df.loc[label_index], inplace=True)
@@ -144,11 +150,11 @@ def find_column_labels(df, label_fingerprints, label_match_thresh=3, special_cha
     if initial_index_is_default:
         df.reset_index(drop=True, inplace=True)
     else:
-        df.index = initial_index[label_index+1:]
+        df.index = initial_index[label_index + 1 :]
 
 
 def merge_columns_by_label(df, deduplicate_values=False):
-    '''
+    """
     Merges columns of a pandas `DataFrame` that have identical labels
 
     For duplicate column labels in ``df``, the first instance of each label
@@ -184,7 +190,7 @@ def merge_columns_by_label(df, deduplicate_values=False):
 
     :return:
         Returns ``None``. The ``df`` argument is mutated.
-    '''
+    """
 
     # Get the set of duplicate column labels
     duplicate_labels = set(df.columns[df.columns.duplicated()])
@@ -217,17 +223,23 @@ def merge_columns_by_label(df, deduplicate_values=False):
 
 
 def index_is_default(df):
-    '''
+    """
     Returns ``True`` if the provided `DataFrame` has the default ``RangeIndex``.
 
     Else returns ``False``.
-    '''
+    """
 
     return df.index.equals(pd.RangeIndex(df.shape[0])) and df.index.name is None
 
 
-def dataframe_clean_null(df, empty_row_thresh=1, empty_column_thresh=1, falsey_is_null=False, special_characters=''):
-    '''
+def dataframe_clean_null(
+    df,
+    empty_row_thresh=1,
+    empty_column_thresh=1,
+    falsey_is_null=False,
+    special_characters='',
+):
+    """
     Cleans null values of a pandas `DataFrame` and removes empty rows/columns
 
     Note that this function is computationally intensive and might be slow on
@@ -279,16 +291,18 @@ def dataframe_clean_null(df, empty_row_thresh=1, empty_column_thresh=1, falsey_i
 
     :return:
         Returns ``None``. The ``df`` argument is mutated.
-    '''
+    """
 
     initial_index_is_default = index_is_default(df)
 
     # Apply clean_null() to every cell in df
     for i in range(df.shape[0]):
         for j in range(df.shape[1]):
-            val = clean_null(df.iloc[i, j],
-                             falsey_is_null=falsey_is_null,
-                             special_characters=special_characters)
+            val = clean_null(
+                df.iloc[i, j],
+                falsey_is_null=falsey_is_null,
+                special_characters=special_characters,
+            )
             if val is None:
                 df.iloc[i, j] = np.nan
 

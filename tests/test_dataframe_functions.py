@@ -24,11 +24,13 @@ from etl_toolbox.dataframe_functions import index_is_default
             ['one@one.com', '01jun15', 77777, '777-777-7777', 'CAA']
             ]),
         # label_fingerprints
-        {'emladdr': 'email_address',
-         'dte': 'date',
-         'phnnmbr': 'phone_number',
-         'nom': 'name',
-         'time': 'time'},
+        {
+            'emladdr': 'email_address',
+            'dte': 'date',
+            'phnnmbr': 'phone_number',
+            'nom': 'name',
+            'time': 'time'
+            },
         # expected
         pd.DataFrame([
             ['test@test.com', '04mar14', '12045', '999-333-4444', 'AAA'],
@@ -54,7 +56,11 @@ from etl_toolbox.dataframe_functions import index_is_default
             index=['aaa', 'bbb', 'ccc', 'ccc', 'ddd', 'ddd', 'ccc']
             ),
         # label_fingerprints
-        ['c', 's', 'somethingelse'],
+        [
+            'c',
+            's',
+            'somethingelse'
+            ],
         # expected
         pd.DataFrame([
             [1, 1, 1, 0],
@@ -92,10 +98,12 @@ def test_find_column_labels(df, label_fingerprints, expected):
             ['one@one.com', '01jun15', 77777, '777-777-7777', 'CAA']
             ]),
         # label_fingerprints
-        {'emladdr': 'email_address',
-         'dte': 'date',
-         'time': 'time'}
-        )
+        {
+            'emladdr': 'email_address',
+            'dte': 'date',
+            'time': 'time'
+            }
+    )
 ])
 def test_find_column_labels_exceptions(df, label_fingerprints):
     """test that ValueError is raised if label row isn't found"""

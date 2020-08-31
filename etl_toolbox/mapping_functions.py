@@ -69,9 +69,9 @@ def map_labels(labels, fingerprint_map, special_characters='', return_unmapped=F
 
 
 def append_count(x):
-    '''
+    """
     A generator function that yields x with a numbered suffix.
-    '''
+    """
     i = 0
     while True:
         i += 1
@@ -79,7 +79,7 @@ def append_count(x):
 
 
 def rename_duplicate_labels(labels, rename_generator=append_count):
-    '''
+    """
     Maps a list of ``labels`` such that duplicates are renamed according to the
     ``rename_generator``
 
@@ -112,7 +112,7 @@ def rename_duplicate_labels(labels, rename_generator=append_count):
 
     :return:
         Returns a list.
-    '''
+    """
 
     # Create dictionary of duplicate labels with initialized rename_generators
     seen = set()

@@ -81,8 +81,8 @@ def test_find_column_labels(df, label_fingerprints, expected):
     assert df.index.equals(expected.index)
 
 
-@pytest.mark.parametrize('df, label_fingerprints', [
-    ### Test 1
+@pytest.mark.parametrize('df, label_fingerprints, label_match_thresh, exception_type', [
+    ### Test 1 - test that IndexError is raised if label row isn't found
     (
         # df
         pd.DataFrame([
@@ -102,13 +102,34 @@ def test_find_column_labels(df, label_fingerprints, expected):
             'emladdr': 'email_address',
             'dte': 'date',
             'time': 'time'
-            }
+            },
+        # label_match_thresh
+        3,
+        # exception_type
+        IndexError
+    ),
+    ### Test 2 - test that ValueError is raised if label_match_thresh is set to 0
+    (
+        # df
+        pd.DataFrame([
+            ['eleifend vitae', 0.2289343509, '+'],
+            ['non lorem vitae odio', 0.1746509874, '-']
+            ]),
+        # label_fingerprints
+        {
+            'emladdr': 'email_address',
+            'dte': 'date',
+            'time': 'time'
+            },
+        # label_match_thresh
+        0,
+        # exception_type
+        ValueError
     )
 ])
-def test_find_column_labels_exceptions(df, label_fingerprints):
-    """test that ValueError is raised if label row isn't found"""
-    with pytest.raises(ValueError):
-        assert find_column_labels(df, label_fingerprints)
+def test_find_column_labels_exceptions(df, label_fingerprints, label_match_thresh, exception_type):
+    with pytest.raises(exception_type):
+        assert find_column_labels(df, label_fingerprints, label_match_thresh=label_match_thresh)
 
 
 @pytest.mark.parametrize('df, expected', [
@@ -248,7 +269,7 @@ def test_dataframe_clean_null(df, expected):
     assert df.index.equals(expected.index)
 
 
-@pytest.mark.parametrize('df, expected', [
+@pytest.mark.parametrize('df, expected, empty_row_thresh, empty_column_thresh', [
     ### Test 1
     (
         # df
@@ -276,11 +297,44 @@ def test_dataframe_clean_null(df, expected):
             ['Grant\'s gazelle', 'Gazella granti', np.nan, np.nan]
             ],
             columns=['common_name', 'scientific_name', 'EIN', 'shirt_size']
-            )
+            ),
+        # empty_row_thresh
+        2,
+        # empty_column_thresh
+        3
+        ),
+    ### Test 2
+    (
+        # df
+        pd.DataFrame([
+            ['AAA', 'None', '111-111-1111', 'empty'],
+            ['BAA', 'baa@baa.com', '-', '-'],
+            ['CAA', 'caa@caa.com', 'notavailable', '...'],
+            ['DAA', 'blocked', '444-444-4444', 'null']
+            ],
+            columns=['id', 'email', 'phone', 'col4']
+            ),
+        # expected
+        pd.DataFrame([
+            ['AAA', np.nan, '111-111-1111', np.nan],
+            ['BAA', 'baa@baa.com', np.nan, np.nan],
+            ['CAA', 'caa@caa.com', np.nan, np.nan],
+            ['DAA', np.nan, '444-444-4444', np.nan]
+            ],
+            columns=['id', 'email', 'phone', 'col4']
+            ).astype('object'),
+        # empty_row_thresh
+        0,
+        # empty_column_thresh
+        0
         )
 ])
-def test_dataframe_clean_null_w_thresh(df, expected):
-    dataframe_clean_null(df, empty_row_thresh=2, empty_column_thresh=3)
+def test_dataframe_clean_null_w_thresh(df, expected, empty_row_thresh, empty_column_thresh):
+    print(df)
+    dataframe_clean_null(df, empty_row_thresh=empty_row_thresh, empty_column_thresh=empty_column_thresh)
+    print(df)
+    print(expected)
+
 
     assert df.equals(expected)
     assert df.columns.equals(expected.columns)

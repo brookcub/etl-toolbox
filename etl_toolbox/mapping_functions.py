@@ -6,10 +6,12 @@ based on functions or keys.
 from .cleaning_functions import fingerprint
 
 
-def map_labels(labels, fingerprint_map, special_characters='', return_unmapped=False):
+def map_labels(
+    labels, fingerprint_map, special_characters='', return_unmapped=False
+):
     """
-    Maps a list of ``labels`` to new values based on provided ``fingerprint_map``
-    and returns that mapped list.
+    Maps a list of ``labels`` to new values based on provided
+    ``fingerprint_map`` and returns that mapped list.
 
     This is useful for mapping column labels from a dataframe/file to a
     standard schema, particularly when the labels are inconsistent.
@@ -90,7 +92,7 @@ def rename_duplicate_labels(labels, rename_generator=append_count):
 
     Example:
       >>> from etl_toolbox.mapping_functions import rename_duplicate_labels
-      >>> labels = ['email', 'email', 'email', 'phone', 'name', 'email', 'phone'],
+      >>> labels = ['email', 'email', 'email', 'phone', 'name', 'email', 'phone']
       >>> rename_duplicate_labels(labels)
       ['email_1', 'email_2', 'email_3', 'phone_1', 'name', 'email_4', 'phone_2']
 
@@ -104,6 +106,11 @@ def rename_duplicate_labels(labels, rename_generator=append_count):
         separated by underscore.
 
         Example:
+          >>> def rename_generator(x):
+          ...     i = 0
+          ...     while True:
+          ...         i += 1
+          ...         yield x + '_' + str(i)
           >>> r = rename_generator('label')
           >>> next(r)
           'label_1'

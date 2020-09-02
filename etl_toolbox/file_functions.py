@@ -7,11 +7,11 @@ import re
 
 
 def get_file_list_from_dir(dir, recursive=False, include_regex=None):
-    """
+    r"""
     Returns a `list` of the files in a directory
 
     Example:
-      >>> get_file_list_from_dir('test_data/test_dir')
+      >>> get_file_list_from_dir('test_data/test_dir') # doctest:+SKIP
       ['test_data/test_dir/1.csv',
        'test_data/test_dir/2.csv',
        'test_data/test_dir/3.json']
@@ -21,7 +21,8 @@ def get_file_list_from_dir(dir, recursive=False, include_regex=None):
         from ``dir`` and all of its subdirectories. Default is ``False``.
 
         Example:
-          >>> get_file_list_from_dir('test_data/test_dir', recursive=True)
+          >>> get_file_list_from_dir('test_data/test_dir',
+          ...                        recursive=True)  # doctest:+SKIP
           ['test_data/test_dir/1.csv',
            'test_data/test_dir/2.csv',
            'test_data/test_dir/3.json',
@@ -35,7 +36,7 @@ def get_file_list_from_dir(dir, recursive=False, include_regex=None):
 
         Example:
           >>> get_file_list_from_dir('test_data/test_dir',
-                                     include_regex=r'.*\.csv$')
+          ...                        include_regex=r'.*\.csv$') # doctest:+SKIP
           ['test_data/test_dir/1.csv',
            'test_data/test_dir/2.csv']
 
@@ -48,7 +49,7 @@ def get_file_list_from_dir(dir, recursive=False, include_regex=None):
     # Collect file paths
     for root, dirs, files in os.walk(dir):
         for f in files:
-            file_list.append(os.path.join(root, f))
+            file_list.append(os.path.normpath(os.path.join(root, f)))
 
         if not recursive:
             break

@@ -73,8 +73,8 @@ def clean_null(x, falsey_is_null=False, special_characters=''):
 
     Example:
       >>> from etl_toolbox.cleaning_functions import clean_null
-      >>> clean_null('Unknown')
-      None
+      >>> clean_null('Unknown') is None
+      True
 
     :param x:
         The object to be evaluated. x can be any type, though this function

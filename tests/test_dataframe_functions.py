@@ -1,10 +1,11 @@
 import pytest
 import pandas as pd
 import numpy as np
-from etl_toolbox.dataframe_functions import find_column_labels
-from etl_toolbox.dataframe_functions import merge_columns_by_label
+
 from etl_toolbox.dataframe_functions import dataframe_clean_null
+from etl_toolbox.dataframe_functions import find_column_labels
 from etl_toolbox.dataframe_functions import index_is_default
+from etl_toolbox.dataframe_functions import merge_columns_by_label
 
 
 @pytest.mark.parametrize('df, label_fingerprints, expected', [

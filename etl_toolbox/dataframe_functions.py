@@ -4,7 +4,8 @@ This module contains functions for working with pandas `DataFrame`s.
 
 import numpy as np
 import pandas as pd
-from .cleaning_functions import fingerprint, clean_null
+
+from .cleaning_functions import clean_null, fingerprint
 
 
 def find_column_labels(

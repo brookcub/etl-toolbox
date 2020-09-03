@@ -1,5 +1,6 @@
 import pytest
-from etl_toolbox.cleaning_functions import fingerprint, clean_null, clean_whitespace
+
+from etl_toolbox.cleaning_functions import clean_null, clean_whitespace, fingerprint
 
 
 @pytest.mark.parametrize("input, expected", [

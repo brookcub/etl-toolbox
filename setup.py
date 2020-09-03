@@ -12,7 +12,7 @@ with open("README.rst", "r") as r:
 class PyTest(TestCommand):
     def finalize_options(self):
         TestCommand.finalize_options(self)
-        self.test_args = ["--doctest-modules", "--cov=."]
+        self.test_args = ["--doctest-modules", "--cov=etl_toolbox"]
         self.test_suite = True
 
     def run_tests(self):

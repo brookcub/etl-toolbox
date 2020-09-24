@@ -32,10 +32,10 @@ setup(
     long_description_content_type='text/x-rst',
     url='https://github.com/brookcub/etl-toolbox',
     keywords='etl pandas data cleaning',
-    license='Apache Software License',
+    license='Apache 2.0',
     packages=['etl_toolbox'],
     install_requires=['numpy>=1.18.0',
-                      'pandas>=1.0.0'
+                      'pandas>=0.25.0'
                       ],
     python_requires='>=3.5',
     tests_require=['pytest',
@@ -46,7 +46,12 @@ setup(
     platforms='any',
     test_suite='etl_toolbox.test.test_etl_toolbox',
     classifiers=[
+        'Programming Language :: Python',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Development Status :: 4 - Beta',
         'Natural Language :: English',
         'Intended Audience :: Developers',

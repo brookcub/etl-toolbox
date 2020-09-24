@@ -1,5 +1,5 @@
 '''
-This module contains functions for working with pandas `DataFrame`s.
+.. epigraph:: Functions for working with :class:`pandas.DataFrame`\\ s
 '''
 
 import numpy as np
@@ -12,15 +12,17 @@ def find_column_labels(
     df, label_fingerprints, label_match_thresh=3, special_characters=''
 ):
     """
-    Finds a row of column labels within a pandas `DataFrame`
+    Finds a row of column labels within a :class:`pandas.DataFrame` based on
+    a collection of expected ``label_fingerprints``.
 
     ``df.columns`` is updated to contain the found column labels and all rows
     before and including the column label row are removed.
 
-    Note that all labels must be in the same row, this function will not
-    attempt to correct translational errors.
+    .. note::
+       All labels must be in the same row. This function will not attempt to
+       correct translational errors.
 
-    Example:
+    Usage:
       >>> import pandas as pd
       >>> from etl_toolbox.dataframe_functions import find_column_labels
       >>> df = pd.DataFrame(
@@ -52,36 +54,40 @@ def find_column_labels(
       2  caa@caa.com  01jun15  777-777-7777  CAA
 
     :param df:
-        A pandas `DataFrame` containing column labels as a row, possibly
+        A :class:`pandas.DataFrame` containing column labels as a row, possibly
         preceded by misc. non-data rows.
 
     :param label_fingerprints:
-        A `set` of fingerprinted label names that are expected in the column
-        labels row. It can contain many variations on the expected label
-        names, which makes this function useful for cleaning multiple files
-        with varied column labels.
+        Fingerprinted label names that are expected in the column labels row.
+        It can contain many variations on the expected label names, which
+        makes this function useful for cleaning multiple files with varied
+        column labels.
 
         Example:
           >>> label_fingerprints = {'email', 'emailaddr', 'phone', 'phonenum'}
 
-        This argument can also a `list` or `dict`. If a `dict` is provided,
-        the keys will be used as the set of fingerprints and values will be
-        ignored.
+        .. note::
+           If a `dict` is provided, the keys will be used as the fingerprints
+           and the values will be ignored.
 
-        If you have a ``fingerprint_map`` dictionary for use with the
-        `mapping_functions` module, that can be passed as ``label_fingerprints``.
+        A ``fingerprint_map`` dictionary created for use in the
+        :mod:`~etl_toolbox.mapping_functions` module can be passed as
+        ``label_fingerprints``.
+
+    :type label_fingerprints: set, list, or dict
 
     :param label_match_thresh:
-        (optional) The number of fingerprints that must be found in
-        ``label_fingerprints`` before a row is identified as the label row.
-        The default is `3`.
+        The number of fingerprints that must be found in
+        ``label_fingerprints`` for a row to be identified as the label row.
+        Default is ``3``.
 
         This exists to prevent false matches caused by non-data header rows
         containing values that are also expected column labels.
 
-        For example, in the following `DataFrame`, row 1 will be
-        misidentified as the label row if the `label_match_thresh` is set
-        to `1`:
+        For example, in the following :class:`~pandas.DataFrame`, row 1 will be
+        misidentified as the label row if the ``label_match_thresh`` is set
+        to ``1``:
+
           >>> import pandas as pd
           >>> from etl_toolbox.dataframe_functions import find_column_labels
           >>> df = pd.DataFrame(
@@ -114,21 +120,30 @@ def find_column_labels(
           3  baa@baa.com    05aug13  111-222-3333       BAA
           4  caa@caa.com    01jun15  777-777-7777       CAA
 
-        `3` is a good value for most datasets with a known set of
+        ``3`` is a good value for most datasets with a known set of
         ``label_fingerprints``. It can be set lower if the incoming data has
         few columns and/or highly varied label names.
 
-        If this argument is set to `0`, the function will raise a `ValueError`.
+        If this argument is set to ``0``, the function will raise a
+        :exc:`ValueError`.
+
+    :type label_match_thresh: int, optional
 
     :param special_characters:
         (optional) A string of special characters to preserve while creating
-        the fingerprints for lookup in ``label_fingerprints``.
+        the fingerprints for lookup in ``label_fingerprints``. See
+        :func:`cleaning_functions.fingerprint()
+        <etl_toolbox.cleaning_functions.fingerprint>` for details.
 
-        Any special characters that appear in the elements of
-        ``label_fingerprints`` should be included here.
+        .. note::
+           Any special characters that appear in the elements of
+           ``label_fingerprints`` should be included here.
+
+    :type special_characters: string, optional
 
     :raises IndexError:
-        Raised if a label row can not be identified in the given `DataFrame`.
+        Raised if a label row can not be identified in the given
+        :class:`~pandas.DataFrame`.
 
     :raises ValueError:
         Raised if the ``label_match_thresh`` is set to `0`.
@@ -196,16 +211,17 @@ def find_column_labels(
 
 def merge_columns_by_label(df, deduplicate_values=False):
     """
-    Merges columns of a pandas `DataFrame` that have identical labels
+    Merges columns of a :class:`pandas.DataFrame` that have identical labels
 
     For duplicate column labels in ``df``, the first instance of each label
-    will be turned into a column of `list`s containing the values from all of
+    will be turned into a column of lists containing the values from all of
     the instances. The other instances will then be dropped.
 
-    Note that this does not fingerprint the labels for comparison. Column
-    labels should be cleaned and mapped before using this tool.
+    .. note::
+       This function does not fingerprint the labels for comparison. Column
+       labels should be cleaned and mapped before using this tool.
 
-    Example:
+    Usage:
       >>> import pandas as pd
       >>> from etl_toolbox.dataframe_functions import merge_columns_by_label
       >>> df = pd.DataFrame(
@@ -232,12 +248,14 @@ def merge_columns_by_label(df, deduplicate_values=False):
       3  DAA  [daa@daa.com, 444@daa.com]  444-444-4444
 
     :param df:
-        A pandas `DataFrame`.
+        A :class:`pandas.DataFrame`.
 
     :param deduplicate_values:
-        (optional) If set to ``True``, the values of the combined columns will
-        be deduplicated and stored in the modified `DataFrame` as a `set`
+        If ``True``, the values of the combined columns will be deduplicated
+        and stored in the modified :class:`~pandas.DataFrame` as a `set`
         instead of a `list`.
+
+    :type deduplicate_values: boolean, optional
 
     :return:
         Returns ``None``. The ``df`` argument is mutated.
@@ -275,7 +293,8 @@ def merge_columns_by_label(df, deduplicate_values=False):
 
 def index_is_default(df):
     """
-    Returns ``True`` if the provided `DataFrame` has the default ``RangeIndex``.
+    Returns ``True`` if the provided :class:`~pandas.DataFrame` has the
+    default :class:`pandas.RangeIndex`.
 
     Else returns ``False``.
     """
@@ -291,12 +310,14 @@ def dataframe_clean_null(
     special_characters='',
 ):
     """
-    Cleans null values of a pandas `DataFrame` and removes empty rows/columns
+    Cleans null values of a :class:`pandas.DataFrame` and removes empty
+    rows/columns.
 
-    Note that this function is computationally intensive and might be slow on
-    large `DataFrame`s.
+    .. warning::
+       This function is computationally intensive and might be slow on large
+       :class:`~pandas.DataFrame`\\ s.
 
-    Example:
+    Usage:
       >>> import pandas as pd
       >>> from etl_toolbox.dataframe_functions import dataframe_clean_null
       >>> df = pd.DataFrame(
@@ -323,35 +344,46 @@ def dataframe_clean_null(
       3  DAA          NaN  444-444-4444
 
     :param df:
-        A pandas `DataFrame`.
+        A :class:`pandas.DataFrame`.
 
     :param empty_row_thresh:
-        (optional) The number of non-null values required for a row to be
-        considered populated/non-empty. Default is 1.
+        The number of non-null values required for a row to be considered
+        populated/non-empty. Default is ``1``.
 
-        If set to 0, no rows will be removed.
+        If set to ``0``, no rows will be removed.
+
+    :type empty_row_thresh: int, optional
 
     :param empty_column_thresh:
-        (optional) The number of non-null values required for a column to be
-        considered populated/non-empty. Default is 1.
+        The number of non-null values required for a column to be considered
+        populated/non-empty. Default is ``1``.
 
-        Note that rows are dropped before columns, so this threshold will be
-        applied to the values that remain after rows are removed. If this
-        value is greater than 1, the resulting ``df`` may contain rows with
-        fewer populated cells than ``empty_row_thresh``. However, it will
-        never contain completely empty rows.
+        .. note::
+           Rows are dropped before columns, so this threshold will be applied
+           to the values that remain **after rows are removed**. If
+           ``empty_column_thresh`` is greater than ``1``, the resulting ``df``
+           may contain rows with fewer populated cells than
+           ``empty_row_thresh``. However, it will never contain completely
+           empty rows (unless ``empty_row_thresh`` is ``0``).
 
-        If set to 0, no columns will be removed.
+        If set to ``0``, no columns will be removed.
+
+    :type empty_column_thresh: int, optional
 
     :param falsey_is_null:
-        (optional) A boolean which controls whether all falsey objects are
-        considered null-indicating. See ``cleaning_functions.clean_null()``
-        documentation for details.
+        Controls whether falsey objects are considered *null-indicating*.
+        See :func:`cleaning_functions.clean_null()
+        <etl_toolbox.cleaning_functions.clean_null>` for details.
+        Default is ``False``.
+
+    :type falsey_is_null: boolean, optional
 
     :param special_characters:
-        (optional) A string of special characters to preserve while creating
-        the fingerprints. Any special characters which are individually
-        meaningful in the data should be included here.
+        A string of special characters to preserve while creating the
+        fingerprints. See :func:`cleaning_functions.fingerprint()
+        <etl_toolbox.cleaning_functions.fingerprint>` for details.
+
+    :type special_characters: string, optional
 
     :return:
         Returns ``None``. The ``df`` argument is mutated.

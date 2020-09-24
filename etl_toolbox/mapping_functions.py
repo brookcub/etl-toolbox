@@ -1,6 +1,5 @@
 '''
-This module contains functions for mapping the values of iterable collections
-based on functions or keys.
+.. epigraph:: Functions for mapping collections of values
 '''
 
 from .cleaning_functions import fingerprint
@@ -20,10 +19,10 @@ def map_labels(
     isn't found in ``fingerprint_map``, that label will be ``None`` in
     returned list.
 
-    Example:
+    Usage:
       >>> from etl_toolbox.mapping_functions import map_labels
       >>> labels = [1, '2_A', '2b']
-      >>> fingerprint_map = {'1': 'one', '2a': 'two_a', 'extrakey': 'extravalue'}
+      >>> fingerprint_map = {'1': 'one', '2a': 'two_a', 'extrakey': 'value'}
       >>> map_labels(labels, fingerprint_map)
       ['one', 'two_a', None]
 
@@ -36,15 +35,27 @@ def map_labels(
         outputs.
 
     :param special_characters:
-        (optional) A string of special characters to preserve while
-        fingerprinting the labels. This should include any special characters
-        that appear in the keys of ``fingerprint_map``.
+        A string of special characters to preserve while fingerprinting the
+        labels. See :func:`cleaning_functions.fingerprint()
+        <etl_toolbox.cleaning_functions.fingerprint>` for details.
+
+        .. note::
+           This should include any special characters that appear in the keys
+           of ``fingerprint_map``.
+
+    :type special_characters: string, optional
 
     :param return_unmapped:
-        (optional) If this is set to ``True``, this function will return a
-        tuple of the mapped labels and a set of unmapped labels (any value
-        from ``labels`` whose fingerprint was not found in
-        ``fingerprint_map``).
+        If this is set to ``True``, this function will return a tuple of the
+        mapped labels and a set of unmapped labels (any value from ``labels``
+        whose fingerprint was not found in ``fingerprint_map``). Default is
+        ``False``.
+
+        .. note::
+           This is useful for tracking unrecognized labels of incoming files in
+           an automated ETL system.
+
+    :type return_unmapped: boolean, optional
 
     :return:
         Returns a list or, if the ``return_unmapped`` option is ``True``,
@@ -72,7 +83,7 @@ def map_labels(
 
 def append_count(x):
     """
-    A generator function that yields x with a numbered suffix.
+    A generator function that yields ``x`` with a numbered suffix.
     """
     i = 0
     while True:
@@ -83,27 +94,27 @@ def append_count(x):
 def rename_duplicate_labels(labels, rename_generator=append_count):
     """
     Maps a list of ``labels`` such that duplicates are renamed according to the
-    ``rename_generator``
+    ``rename_generator``.
 
     The order of ``labels`` is preserved in the return, and if a label isn't a
     duplicate, its value will be unchanged. Values will NOT be fingerprinted
     for comparison, so this function is best used after labels have been
     standardized.
 
-    Example:
+    Usage:
       >>> from etl_toolbox.mapping_functions import rename_duplicate_labels
-      >>> labels = ['email', 'email', 'email', 'phone', 'name', 'email', 'phone']
+      >>> labels = ['email', 'email', 'phone', 'name', 'email', 'phone']
       >>> rename_duplicate_labels(labels)
-      ['email_1', 'email_2', 'email_3', 'phone_1', 'name', 'email_4', 'phone_2']
+      ['email_1', 'email_2', 'phone_1', 'name', 'email_3', 'phone_2']
 
     :param labels:
         The list of labels to map.
 
     :param rename_generator:
-        (optional) A generator function that specifies how to rename duplicate
-        columns. It should take a label name as a positional argument and yield
-        the renamed label. The default ``rename_generator`` appends a count,
-        separated by underscore.
+        A generator function that specifies how to rename duplicate columns. It
+        should take a label name as a positional argument and yield the renamed
+        label. The default ``rename_generator`` appends a count, separated by
+        underscore.
 
         Example:
           >>> def rename_generator(x):
@@ -116,6 +127,8 @@ def rename_duplicate_labels(labels, rename_generator=append_count):
           'label_1'
           >>> next(r)
           'label_2'
+
+    :type rename_generator: generator, optional
 
     :return:
         Returns a list.

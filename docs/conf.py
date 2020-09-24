@@ -29,6 +29,8 @@ extensions = [
 
 language = 'en'
 
+master_doc = "index"
+source_suffix = ".rst"
 pygments_style = "friendly"
 
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']

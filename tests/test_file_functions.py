@@ -39,6 +39,6 @@ from etl_toolbox.file_functions import get_file_list_from_dir
         )
 ])
 def test_get_file_list_from_dir(dir, recursive, include_regex, expected):
-    assert get_file_list_from_dir(dir,
-                                  recursive=recursive,
-                                  include_regex=include_regex) == expected
+    assert sorted(
+        get_file_list_from_dir(dir, recursive=recursive, include_regex=include_regex)
+    ) == sorted(expected)

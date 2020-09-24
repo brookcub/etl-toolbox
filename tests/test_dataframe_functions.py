@@ -311,7 +311,8 @@ def test_dataframe_clean_null(df, expected):
             ['AAA', 'None', '111-111-1111', 'empty'],
             ['BAA', 'baa@baa.com', '-', '-'],
             ['CAA', 'caa@caa.com', 'notavailable', '...'],
-            ['DAA', 'blocked', '444-444-4444', 'null']
+            ['DAA', 'blocked', '444-444-4444', 'null'],
+            ['none', 'blank', 'na', 'nbsp']
             ],
             columns=['id', 'email', 'phone', 'col4']
             ),
@@ -320,22 +321,46 @@ def test_dataframe_clean_null(df, expected):
             ['AAA', np.nan, '111-111-1111', np.nan],
             ['BAA', 'baa@baa.com', np.nan, np.nan],
             ['CAA', 'caa@caa.com', np.nan, np.nan],
-            ['DAA', np.nan, '444-444-4444', np.nan]
+            ['DAA', np.nan, '444-444-4444', np.nan],
+            [np.nan, np.nan, np.nan, np.nan]
             ],
             columns=['id', 'email', 'phone', 'col4']
             ).astype('object'),
         # empty_row_thresh
         0,
         # empty_column_thresh
-        0
+        0,
+        ),
+    ### Test 3
+    (
+        # df
+        pd.DataFrame([
+            ['AAA', 'None', '111-111-1111', 'empty'],
+            ['BAA', 'baa@baa.com', '-', '-'],
+            ['CAA', 'caa@caa.com', 'notavailable', '...'],
+            ['DAA', 'blocked', '444-444-4444', 'null'],
+            ['none', 'blank', 'na', 'nbsp']
+            ],
+            columns=['id', 'email', 'phone', 'col4']
+            ),
+        # expected
+        pd.DataFrame([
+            ['AAA', np.nan, '111-111-1111'],
+            ['BAA', 'baa@baa.com', np.nan],
+            ['CAA', 'caa@caa.com', np.nan],
+            ['DAA', np.nan, '444-444-4444'],
+            [np.nan, np.nan, np.nan]
+            ],
+            columns=['id', 'email', 'phone']
+            ).astype('object'),
+        # empty_row_thresh
+        0,
+        # empty_column_thresh
+        2
         )
 ])
 def test_dataframe_clean_null_w_thresh(df, expected, empty_row_thresh, empty_column_thresh):
-    print(df)
     dataframe_clean_null(df, empty_row_thresh=empty_row_thresh, empty_column_thresh=empty_column_thresh)
-    print(df)
-    print(expected)
-
 
     assert df.equals(expected)
     assert df.columns.equals(expected.columns)

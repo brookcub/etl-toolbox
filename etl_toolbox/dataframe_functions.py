@@ -409,7 +409,8 @@ def dataframe_clean_null(
     df.dropna(axis=1, thresh=empty_column_thresh, inplace=True)
 
     # Make sure there are no empty rows in the final df
-    if empty_column_thresh > 1:
+    # (unless empty_row_thresh is 0)
+    if empty_column_thresh > 1 and empty_row_thresh != 0:
         df.dropna(axis=0, how='all', inplace=True)
 
     # Reset the index if it was initially a default index

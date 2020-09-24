@@ -3,3 +3,4 @@ pytest-cov>=2.9.0
 coverage>=5.1
 numpy>=1.18.0
 pandas>=0.25.0
+sphinx-bootstrap-theme>=0.7.1

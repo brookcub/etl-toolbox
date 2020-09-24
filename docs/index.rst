@@ -4,6 +4,10 @@
    contain the root `toctree` directive.
 
 .. include:: ../README.rst
+   :end-before: docs-exclusion-marker-start
+
+.. include:: ../README.rst
+  :start-after: docs-exclusion-marker-end
 
 .. toctree::
    :hidden:

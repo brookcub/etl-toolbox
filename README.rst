@@ -8,14 +8,29 @@ data cleaning. It contains tools that are useful for nearly any ETL pipeline,
 with a specific focus on the data variety challenges that arise when compiling
 data from many sources.
 
-.. _PyPI: http://pypi.python.org/pypi/etl-toolbox/
-.. _pip: https://pip.pypa.io/en/stable/quickstart/
-.. _Open an issue: https://github.com/brookcub/etl-toolbox/issues/new
-.. _issue tracker: https://github.com/brookcub/etl-toolbox/issues
-.. _this repository: https://github.com/brookcub/etl-toolbox/
-.. _the Stack Overflow guide: https://stackoverflow.com/help/minimal-reproducible-example
-.. _PEP8: https://www.python.org/dev/peps/pep-0008/
-.. _Flake8: https://flake8.pycqa.org/en/latest/
+.. image:: https://img.shields.io/github/workflow/status/brookcub/etl-toolbox/Tests?logo=github
+   :alt: GitHub Build Status
+   :target: https://github.com/brookcub/etl-toolbox/actions?query=workflow%3ATests+branch%3Amaster
+
+.. image:: https://codecov.io/gh/brookcub/etl-toolbox/branch/master/graph/badge.svg
+   :alt: Coverage
+   :target: https://codecov.io/gh/brookcub/etl-toolbox
+
+.. image:: https://img.shields.io/readthedocs/etl-toolbox?label=Read%20the%20Docs&logo=Read%20the%20Docs
+   :alt: Read the Docs
+   :target: https://etl-toolbox.readthedocs.io/en/latest/
+
+.. image:: https://img.shields.io/pypi/v/etl-toolbox.svg?color=ffa313
+   :alt: PyPI Version
+   :target: https://pypi.python.org/pypi/etl-toolbox
+
+.. image:: https://img.shields.io/pypi/pyversions/etl-toolbox.svg?color=0882ac
+   :alt: Supported Python versions
+   :target: https://pypi.python.org/pypi/etl-toolbox
+
+.. image:: https://img.shields.io/pypi/l/etl-toolbox.svg?color=0882ac
+   :alt: License
+   :target: https://pypi.python.org/pypi/etl-toolbox
 
 Features
 --------
@@ -29,6 +44,9 @@ Quick Start
 
 Installation
 ~~~~~~~~~~~~
+
+.. _PyPI: http://pypi.python.org/pypi/etl-toolbox/
+.. _pip: https://pip.pypa.io/en/stable/quickstart/
 
 Install from PyPI_ using pip_::
 
@@ -107,8 +125,24 @@ Or clean individual data values:
 ...                               def\t\t 789\t''')
 '123 abc 456 def 789'
 
+.. docs-exclusion-marker-start
+
+Documentation
+-------------
+
+Full documentation is hosted at `etl-toolbox.readthedocs.io <https://etl-toolbox.readthedocs.io>`_.
+
+.. docs-exclusion-marker-end
+
 Contributing
 ------------
+
+.. _Open an issue: https://github.com/brookcub/etl-toolbox/issues/new
+.. _issue tracker: https://github.com/brookcub/etl-toolbox/issues
+.. _this repository: https://github.com/brookcub/etl-toolbox/
+.. _the Stack Overflow guide: https://stackoverflow.com/help/minimal-reproducible-example
+.. _PEP8: https://www.python.org/dev/peps/pep-0008/
+.. _Flake8: https://flake8.pycqa.org/en/latest/
 
 Contributions are appreciated! There are multiple ways to contribute:
 
@@ -146,4 +180,4 @@ Release History
 
 -  0.0.1
 
-   -  Work in progress
+   -  Initial release

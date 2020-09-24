@@ -196,7 +196,7 @@ def test_merge_columns_by_label_dedup(df, expected):
     (
         # df
         pd.DataFrame(
-            np.random.randint(0,100,size=(15, 4)),
+            np.random.randint(0, 100, size=(15, 4)),
             columns=list('ABCD')),
         # expected
         True
@@ -218,8 +218,8 @@ def test_merge_columns_by_label_dedup(df, expected):
     (
         # df
         pd.DataFrame(
-            np.random.randint(0,10,size=(10, 2)),
-            index=pd.RangeIndex(start=0,stop=20,step=2)
+            np.random.randint(0, 10, size=(10, 2)),
+            index=pd.RangeIndex(start=0, stop=20, step=2)
             ),
         # expected
         False
@@ -228,8 +228,8 @@ def test_merge_columns_by_label_dedup(df, expected):
     (
         # df
         pd.DataFrame(
-            np.random.randint(0,10,size=(10, 2)),
-            index=pd.RangeIndex(start=0,stop=10,name='test')
+            np.random.randint(0, 10, size=(10, 2)),
+            index=pd.RangeIndex(start=0, stop=10, name='test')
             ),
         # expected
         False

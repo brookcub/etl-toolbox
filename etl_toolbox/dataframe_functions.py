@@ -151,8 +151,8 @@ def find_column_labels(
     :return:
         Returns ``None``. The ``df`` argument is mutated.
     """
-    if(label_match_thresh == 0):
-        raise(ValueError("label_match_thresh can not be 0."))
+    if label_match_thresh == 0:
+        raise ValueError("label_match_thresh can not be 0.")
 
     # Check whether the index is something other than the default RangeIndex,
     # and temporarily change it to a RangeIndex if it is.

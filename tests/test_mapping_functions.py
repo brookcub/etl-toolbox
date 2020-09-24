@@ -3,6 +3,7 @@ import pytest
 
 from etl_toolbox.mapping_functions import map_labels, rename_duplicate_labels
 
+
 ##
 ## map_labels() tests
 ##

@@ -6,7 +6,7 @@ import os
 import re
 
 
-def get_file_list_from_dir(dir, recursive=False, include_regex=None):
+def get_file_list_from_dir(dir_path, recursive=False, include_regex=None):
     r"""
     Returns a list of the files in a directory
 
@@ -51,7 +51,7 @@ def get_file_list_from_dir(dir, recursive=False, include_regex=None):
     file_list = []
 
     # Collect file paths
-    for root, dirs, files in os.walk(dir):
+    for root, dirs, files in os.walk(dir_path):
         for f in files:
             file_list.append(os.path.normpath(os.path.join(root, f)))
 

@@ -45,7 +45,7 @@ Usage
 0      created by:   Brookcub Industries  for testing purposes           NaN        NaN
 1             date:           2020-06-07                3 rows  some columns        NaN
 2               NaN                  NaN                   NaN           NaN        NaN
-3             Cust.             EML-addr                  \nOn      phn-nmbr       col5
+3             Cust.             EML-addr                On          phn-nmbr       col5
 4     Golden jackal    c.aureus@mail.com              03/04/14      333-4444      blank
 5  Pie, rufous tree                 none                   NaN      222-3333      empty
 6   Vulture, bengal              blocked              06/01/15      777-7777       none
@@ -67,7 +67,7 @@ Find and standardize column labels using a dictionary of the expected values:
 >>>
 >>> find_column_labels(df, fingerprint_map)
 >>> df
-              Cust.             EML-addr           \nOn  phn-nmbr   col5
+              Cust.             EML-addr         On      phn-nmbr   col5
 0     Golden jackal    c.aureus@mail.com       03/04/14  333-4444  blank
 1  Pie, rufous tree                 none            NaN  222-3333  empty
 2   Vulture, bengal              blocked       06/01/15  777-7777   none

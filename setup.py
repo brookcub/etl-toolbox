@@ -14,7 +14,8 @@ class PyTest(TestCommand):
         TestCommand.finalize_options(self)
         self.test_args = ["--doctest-modules",
                           "--cov=etl_toolbox",
-                          "--doctest-glob=*.rst"]
+                          "--doctest-glob=*.rst",
+                          "--ignore=docs/conf.py"]
         self.test_suite = True
 
     def run_tests(self):

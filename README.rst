@@ -136,7 +136,7 @@ Follow these steps for submitting pull requests:
 #. Find an issue or feature on the `issue tracker`_.
 #. Fork `this repository`_ on GitHub and make changes in a branch.
 #. Add tests to confirm that the bugfix/feature works as expected.
-#. Run the entire test suite and coverage report with ``pytest --doctest-modules --doctest-glob=*.rst --cov=etl_toolbox``. Make sure text coverage is 100% and all tests are passing.
+#. Run the entire test suite and coverage report with ``pytest --doctest-modules --doctest-glob=*.rst --cov=etl_toolbox --ignore=docs/conf.py``. Make sure text coverage is 100% and all tests are passing.
 #. Submit a pull request.
 
 The code style for etl-toolbox mostly follows PEP8_. A linter like Flake8_ is recommended for double checking new contributions.

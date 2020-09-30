@@ -178,6 +178,12 @@ The code style for etl-toolbox mostly follows PEP8_. A linter like Flake8_ is re
 Release History
 ---------------
 
+-  0.0.2
+
+   -  Add GitHub continuous integration
+   -  Add project links and badges to readme and PyPI metadata
+   -  Fix bug in ``merge_columns_by_label()`` that raises a ``ValueError`` if ``df`` has multiple columns labeled ``None``
+
 -  0.0.1
 
    -  Initial release

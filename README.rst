@@ -16,19 +16,19 @@ data from many sources.
    :alt: Coverage
    :target: https://codecov.io/gh/brookcub/etl-toolbox
 
-.. image:: https://img.shields.io/readthedocs/etl-toolbox?label=Read%20the%20Docs&logo=Read%20the%20Docs
+.. image:: https://img.shields.io/readthedocs/etl-toolbox?label=docs&logo=Read%20the%20Docs
    :alt: Read the Docs
    :target: https://etl-toolbox.readthedocs.io/en/latest/
 
-.. image:: https://img.shields.io/pypi/v/etl-toolbox.svg?color=ffa313
+.. image:: https://img.shields.io/pypi/v/etl-toolbox?color=ffa313
    :alt: PyPI Version
    :target: https://pypi.python.org/pypi/etl-toolbox
 
-.. image:: https://img.shields.io/pypi/pyversions/etl-toolbox.svg?color=0882ac
+.. image:: https://img.shields.io/pypi/pyversions/etl-toolbox?color=0882ac
    :alt: Supported Python versions
    :target: https://pypi.python.org/pypi/etl-toolbox
 
-.. image:: https://img.shields.io/pypi/l/etl-toolbox.svg?color=0882ac
+.. image:: https://img.shields.io/pypi/l/etl-toolbox?color=0882ac
    :alt: License
    :target: https://pypi.python.org/pypi/etl-toolbox
 

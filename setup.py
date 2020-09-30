@@ -31,9 +31,14 @@ setup(
     description='Useful ETL functions for Python',
     long_description=long_description,
     long_description_content_type='text/x-rst',
-    url='https://github.com/brookcub/etl-toolbox',
+    url='https://etl-toolbox.readthedocs.io',
+    project_urls={
+        "Source Code": "https://github.com/brookcub/etl-toolbox",
+        "Bug Reports": "https://github.com/brookcub/etl-toolbox/issues",
+        "Documentation": "https://etl-toolbox.readthedocs.io",
+    },
     keywords='etl pandas data cleaning',
-    license='Apache 2.0',
+    license='Apache-2.0',
     packages=['etl_toolbox'],
     install_requires=['numpy>=1.18.0',
                       'pandas>=0.25.0'

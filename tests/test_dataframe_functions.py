@@ -183,6 +183,27 @@ def test_merge_columns_by_label(df, expected):
             ],
             columns=['id', 'email', 'phone', 'name']
             )
+        ),
+    ### Test 2
+    (
+        # df
+        pd.DataFrame([
+            ['AAA', 'aaa@aaa.com', '111-111-1111', '111@aaa.com', 'AAA', '', '555-555-5555'],
+            ['BAA', 'baa@baa.com', '222-222-2222', 'baa@baa.com', 'BAA', '', '666-666-6666'],
+            ['CAA', 'caa@caa.com', '333-333-3333', 'caa@caa.com', 'CAA', '', '333-333-3333'],
+            ['DAA', 'daa@daa.com', '444-444-4444', '444@daa.com', 'DAA', '', '888-888-8888']
+            ],
+            columns=[None, 'email', 'phone', 'email', None, None, 'phone']
+            ),
+        # expected
+        pd.DataFrame([
+            [{'AAA',''}, {'aaa@aaa.com', '111@aaa.com'}, {'111-111-1111', '555-555-5555'}],
+            [{'BAA',''}, {'baa@baa.com'}, {'222-222-2222', '666-666-6666'}],
+            [{'CAA',''}, {'caa@caa.com'}, {'333-333-3333'}],
+            [{'DAA',''}, {'daa@daa.com', '444@daa.com'}, {'444-444-4444', '888-888-8888'}]
+            ],
+            columns=[None, 'email', 'phone']
+            )
         )
 ])
 def test_merge_columns_by_label_dedup(df, expected):

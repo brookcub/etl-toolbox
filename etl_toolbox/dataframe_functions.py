@@ -282,8 +282,18 @@ def merge_columns_by_label(df, deduplicate_values=False):
         # Temporarily rename first instance while others are dropped
         temp_labels = df.columns.tolist()
         temp_labels[first_iloc] = 'temp'
-        df.columns = temp_labels
-        df.drop(columns=label, inplace=True)
+
+        # drop can't take None as a column name, so this is a workaround
+        if label is None:
+            placeholder_label = '**350732-none-label-placeholder-value-49183**'
+            temp_labels = [
+                placeholder_label if x is None else x for x in temp_labels
+            ]
+            df.columns = temp_labels
+            df.drop(columns=placeholder_label, inplace=True)
+        else:
+            df.columns = temp_labels
+            df.drop(columns=label, inplace=True)
 
         # Rename back to the original label
         temp_labels = df.columns.tolist()

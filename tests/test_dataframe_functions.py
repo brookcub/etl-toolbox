@@ -154,6 +154,48 @@ def test_find_column_labels_exceptions(df, label_fingerprints, label_match_thres
             ],
             columns=['id', 'email', 'phone', 'name']
             )
+        ),
+    ### Test 2
+    (
+        # df
+        pd.DataFrame([
+            [np.nan, 'ch.blossom@gmail'],
+            ['CLOUD@AOL.COM', np.nan],
+            ['SAPPHIRE@GMAIL.COM', 'SAPPHIRE+2@GMAIL.COM'],
+            ['DNH@AOL.COM', np.nan]
+            ],
+            columns=['email', 'email']
+            ),
+        # expected
+        pd.DataFrame([
+            [['ch.blossom@gmail']],
+            [['CLOUD@AOL.COM']],
+            [['SAPPHIRE@GMAIL.COM', 'SAPPHIRE+2@GMAIL.COM']],
+            [['DNH@AOL.COM']]
+            ],
+            columns=['email']
+            )
+        ),
+    ### Test 3
+    (
+        # df
+        pd.DataFrame([
+            [91546, 'TEST1', np.nan],
+            [92643, 'TEST2', np.nan],
+            [93555, 'TEST3', np.nan],
+            [91546, 'TEST4', np.nan],
+            ],
+            columns=[None, None, None]
+            ),
+        # expected
+        pd.DataFrame([
+            [[91546, 'TEST1']],
+            [[92643, 'TEST2']],
+            [[93555, 'TEST3']],
+            [[91546, 'TEST4']],
+            ],
+            columns=[None]
+            )
         )
 ])
 def test_merge_columns_by_label(df, expected):

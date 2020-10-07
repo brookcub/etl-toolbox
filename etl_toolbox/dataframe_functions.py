@@ -16,7 +16,8 @@ def find_column_labels(
     a collection of expected ``label_fingerprints``.
 
     ``df.columns`` is updated to contain the found column labels and all rows
-    before and including the column label row are removed.
+    before and including the column label row are removed. If the initial
+    column labels of ``df`` fit the match criteria, ``df`` will be unchanged.
 
     .. note::
        All labels must be in the same row. This function will not attempt to
@@ -153,6 +154,23 @@ def find_column_labels(
     """
     if label_match_thresh == 0:
         raise ValueError("label_match_thresh can not be 0.")
+
+    # First, check if the initial labels are already correct. If they are,
+    # exit without changing df.
+
+    label_count = 0
+
+    for cell in df.columns:
+        cell_fingerprint = fingerprint(
+            cell, special_characters=special_characters
+        )
+
+        if cell_fingerprint in label_fingerprints:
+            label_count += 1
+
+    
+    if label_count >= label_match_thresh:
+        return None
 
     # Check whether the index is something other than the default RangeIndex,
     # and temporarily change it to a RangeIndex if it is.

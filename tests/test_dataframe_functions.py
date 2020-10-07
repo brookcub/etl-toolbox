@@ -72,7 +72,36 @@ from etl_toolbox.dataframe_functions import merge_columns_by_label
             columns=['c', 'S', 'something-else', ''],
             dtype='object'
             )
-        )
+        ),
+    ### Test 3, column labels are already correct
+    (
+        # df
+        pd.DataFrame([
+            ['test@test.com', '04mar14', '12045', '999-333-4444', 'AAA'],
+            ['green@green.com', None, '32124', '111-222-3333', 'BAA'],
+            ['EML-addr', 'Dte', 'col3', 'phn-nmbr', 'NOM'],
+            ['one@one.com', '01jun15', 77777, '777-777-7777', 'CAA']
+            ],
+            columns=['EML-addr', 'Dte', 'col3', 'phn-nmbr', 'NOM']
+            ),
+        # label_fingerprints
+        {
+            'emladdr': 'email_address',
+            'dte': 'date',
+            'phnnmbr': 'phone_number',
+            'nom': 'name',
+            'time': 'time'
+            },
+        # expected
+        pd.DataFrame([
+            ['test@test.com', '04mar14', '12045', '999-333-4444', 'AAA'],
+            ['green@green.com', None, '32124', '111-222-3333', 'BAA'],
+            ['EML-addr', 'Dte', 'col3', 'phn-nmbr', 'NOM'],
+            ['one@one.com', '01jun15', 77777, '777-777-7777', 'CAA']
+            ],
+            columns=['EML-addr', 'Dte', 'col3', 'phn-nmbr', 'NOM']
+            )
+    )
 ])
 def test_find_column_labels(df, label_fingerprints, expected):
     find_column_labels(df, label_fingerprints)

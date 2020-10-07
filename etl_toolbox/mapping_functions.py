@@ -16,7 +16,7 @@ def map_labels(
     standard schema, particularly when the labels are inconsistent.
 
     The order of ``labels`` will be preserved in the return, and if a label
-    isn't found in ``fingerprint_map``, that label will be ``None`` in
+    isn't found in ``fingerprint_map``, that label will be ``'-'`` in
     returned list.
 
     Usage:
@@ -24,7 +24,7 @@ def map_labels(
       >>> labels = [1, '2_A', '2b']
       >>> fingerprint_map = {'1': 'one', '2a': 'two_a', 'extrakey': 'value'}
       >>> map_labels(labels, fingerprint_map)
-      ['one', 'two_a', None]
+      ['one', 'two_a', '-']
 
     :param labels:
         The list of labels to map. These will be fingerprinted for their
@@ -72,7 +72,7 @@ def map_labels(
             x_mapped = fingerprint_map[x_fingerprint]
             mapped_labels.append(x_mapped)
         else:
-            mapped_labels.append(None)
+            mapped_labels.append('-')
             unmapped_labels.add(x)
 
     if return_unmapped:

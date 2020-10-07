@@ -17,7 +17,7 @@ from etl_toolbox.mapping_functions import map_labels, rename_duplicate_labels
     (
         ['$amount', 'field_2', 'sessionID', 'method', ''],
         {'field2': 'first_name', 'amount': 'cost', 'emailaddress': 'email'},
-        ['cost', 'first_name', None, None, None]
+        ['cost', 'first_name', '-', '-', '-']
         )
 ])
 def test_map_labels(labels, fingerprint_map, expected):
@@ -42,7 +42,7 @@ def test_map_labels_w_special_characters(labels, fingerprint_map,
     (
         ['$amount', 'field_2', 'sessionID', 'method', ''],
         {'field2': 'first_name', 'amount': 'cost', 'emailaddress': 'email'},
-        (['cost', 'first_name', None, None, None], {'sessionID', 'method', ''})
+        (['cost', 'first_name', '-', '-', '-'], {'sessionID', 'method', ''})
         )
 ])
 def test_map_labels_w_return_unmapped(labels, fingerprint_map, expected):

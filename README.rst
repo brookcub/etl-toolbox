@@ -95,7 +95,7 @@ Find and standardize column labels using a dictionary of the expected values:
 >>>
 >>> df.columns = map_labels(df.columns, fingerprint_map)
 >>> df
-               Name                Email           Date     Phone    NaN
+               Name                Email           Date     Phone      -
 0     Golden jackal    c.aureus@mail.com       03/04/14  333-4444  blank
 1  Pie, rufous tree                 none            NaN  222-3333  empty
 2   Vulture, bengal              blocked       06/01/15  777-7777   none

@@ -77,7 +77,8 @@ def test_clean_null_w_falsey_is_null(input, expected):
         \u2009 \u200A \u2028 c
         \u2029 \u202F \u205F
         \u3000''',              'a b c'),
-    ('',                        '')
+    ('',                        ''),
+    (0.0,                       0.0)
 ])
 def test_clean_whitespace(input, expected):
     assert clean_whitespace(input) == expected

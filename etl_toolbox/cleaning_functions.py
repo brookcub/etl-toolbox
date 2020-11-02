@@ -207,11 +207,11 @@ def clean_whitespace(x):
 
     :param x:
         The string to be cleaned.
-
-    :type x: string
+        .. note::
+            If ``x`` is not a string, it will be returned unchanged.
 
     :return:
-        Returns a string.
+        Returns the same type as ``x``.
 
     .. note::
         :func:`clean_whitespace()` does not remove unicode formatting
@@ -227,5 +227,8 @@ def clean_whitespace(x):
            - **U+2060**
            - **U+FEFF**
     """
+
+    if not isinstance(x, str):
+        return x
 
     return " ".join(x.split())

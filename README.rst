@@ -178,6 +178,14 @@ The code style for etl-toolbox mostly follows PEP8_. A linter like Flake8_ is re
 Release History
 ---------------
 
+-  0.0.3
+
+   -  Fix multiple bugs in ``merge_columns_by_label()`` that occurred with certain inputs
+   -  Change ``merge_columns_by_label()`` to remove ``None`` and ``np.nan`` values from merged columns
+   -  Change ``find_column_labels()`` to check whether the existing column labels fit the match criteria before searching rows
+   -  Change ``map_labels()`` to return ``'-'`` instead of ``None`` for unmapped labels
+   -  Change ``clean_whitespace()`` to return non-string inputs unaltered instead of raising an exception
+
 -  0.0.2
 
    -  Add GitHub continuous integration
